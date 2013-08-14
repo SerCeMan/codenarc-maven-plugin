@@ -307,6 +307,21 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
    * @parameter expression="${codenarc.groovy.version}" default-value="1.7.5"
    */
   String groovyVersion
+  
+  
+  /**
+   * List of additional libraries separated by comma, which should be added to classpath
+   * Every library should contain:
+   * 	groupId, artifactId and version
+   * separated by colon
+   * 
+   * For example:
+   * 	com.google.guava:guava:14.0.1,org.hibernate:hibernate-core:4.2.4.Final
+   * 
+   * @parameter expression="${codenarc.additionalArtifacts}" default-value=""
+   * @since 0.18.2
+   */
+  String additionalArtifacts
 
   /**
    * Executes the generation of the report.
@@ -328,7 +343,12 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
             [groupId: 'log4j', artifactId: 'log4j', version: log4jVersion],
             [groupId: 'org.codehaus.groovy', artifactId: 'groovy-all', version: groovyVersion]
     ]
-
+	
+	additionalArtifacts.split(',').each {
+		def parsedArtefact = it.split(':')
+		log.debug("Parse artifact ${parsedArtefact}")
+		items << [groupId: parsedArtefact[0], artifactId: parsedArtefact[1], version: parsedArtefact[2]]
+	}
 
     compileSourceRoots.each() { compileSourceRoot -> log.debug( "compileSourceRoot ==> ${compileSourceRoot}" ) }
 
