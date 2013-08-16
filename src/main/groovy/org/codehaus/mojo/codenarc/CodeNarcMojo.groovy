@@ -322,6 +322,17 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
    * @since 0.18.2
    */
   String additionalArtifacts
+  
+  /**
+   * List of additional pathes separated by comma, which should be added to classpath
+   *
+   * For example:
+   * 	/home/admin/classes,/home/user/lib/lib.jar
+   *
+   * @parameter expression="${codenarc.addToClasspath}" default-value=""
+   * @since 0.18.3
+   */
+  String addToClasspath
 
   /**
    * Executes the generation of the report.
@@ -391,14 +402,18 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
         tempLogFile.text = log4jContents
         log4jConfigFile = tempLogFile.toURL()
       }
-
+	  
       log.debug( "log4jConfigFile => ${tempLogFile}" )
       pathelement( location: tempLogFile )
-
+	  
+	  addToClasspath.split(',').each {
+		  log.info( "Add to classpath => ${it}" )
+		  pathelement( location: new File(it) )
+	  }
     }
 
     codenarcClasspath.list().each {
-      log.debug( "codenarc.classpath entry => ${it}" )
+      log.info( "codenarc.classpath entry => ${it}" )
     }
 
 
