@@ -316,7 +316,7 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
    * separated by colon
    * 
    * For example:
-   * 	com.google.guava:guava:14.0.1,org.hibernate:hibernate-core:4.2.4.Final
+   * 	com.google.guava:guava:14.0.1;org.hibernate:hibernate-core:4.2.4.Final
    * 
    * @parameter expression="${codenarc.additionalArtifacts}" default-value=""
    * @since 0.18.2
@@ -355,7 +355,7 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
             [groupId: 'org.codehaus.groovy', artifactId: 'groovy-all', version: groovyVersion]
     ]
 	
-	additionalArtifacts.split(',').each {
+	additionalArtifacts.split(';').each {
 		def parsedArtefact = it.split(':')
 		log.debug("Parse artifact ${parsedArtefact}")
 		items << [groupId: parsedArtefact[0], artifactId: parsedArtefact[1], version: parsedArtefact[2]]
@@ -413,7 +413,7 @@ log4j.appender.R.layout.ConversionPattern=%d{ISO8601} %c{1} [%t] %p - %m%n
     }
 
     codenarcClasspath.list().each {
-      log.info( "codenarc.classpath entry => ${it}" )
+      log.debug( "codenarc.classpath entry => ${it}" )
     }
 
 
